@@ -8,26 +8,37 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  perf-test:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 2️⃣ Run JMeter using PerfAction
       - name: PerfAction for JMeter
         uses: QAInsights/PerfAction@v5.6.3
         with:
           test-plan-path: '.BlazeMeter.jmx'
+          generate-html-report: true       # Ensure HTML report is generated
 
+      # 3️⃣ Debug - check if report folder exists
+      - name: Check reports folder
+        run: ls -R ./reports
+
+      # 4️⃣ Upload JMeter JTL result
       - name: Upload JMeter Results (JTL)
         uses: actions/upload-artifact@v4
         with:
           name: jmeter-results
           path: ./result.jtl
+          if-no-files-found: warn
 
+      # 5️⃣ Upload JMeter HTML report
       - name: Upload JMeter HTML Report
         uses: actions/upload-artifact@v4
         with:
           name: jmeter-html-report
-          path: ./reports/html
+          path: ./html
+          if-no-files-found: warn
