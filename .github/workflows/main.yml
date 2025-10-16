@@ -20,12 +20,13 @@ jobs:
       - name: PerfAction for JMeter
         uses: QAInsights/PerfAction@v5.6.3
         with:
-          test-plan-path: '.BlazeMeter.jmx'
-          generate-html-report: true       # Ensure HTML report is generated
+          test-plan-path: './TestPlans/BlazeMeter.jmx'
+          generate-html-report: true       # Ensure HTML report is created
+          results-folder: './reports'      # Make sure folder is created in runner
 
-      # 3️⃣ Debug - check if report folder exists
+      # 3️⃣ Debug - check reports folder **after** PerfAction runs
       - name: Check reports folder
-        run: ls -R ./reports
+        run: ls -R ./reports || echo "No reports folder found"
 
       # 4️⃣ Upload JMeter JTL result
       - name: Upload JMeter Results (JTL)
@@ -42,4 +43,3 @@ jobs:
           name: jmeter-html-report
           path: ./reports/html
           if-no-files-found: warn
-
