@@ -40,5 +40,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: jmeter-html-report
-          path: ./html
+          path: ./reports/html
           if-no-files-found: warn
+
